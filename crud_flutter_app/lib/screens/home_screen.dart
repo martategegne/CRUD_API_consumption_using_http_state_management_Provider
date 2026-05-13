@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Provider.of<PhotoProvider>(context, listen: false).addPhoto(
-            Photo(id: 0, title: "New Photo", url: "https://via.placeholder.com/150"),
+            Photo(id: 0, title: "New Photo",
+             url: "https://picsum.photos/id/${DateTime.now().millisecondsSinceEpoch % 1000}/200/200" ),
           );
         },
         child: Icon(Icons.add),
