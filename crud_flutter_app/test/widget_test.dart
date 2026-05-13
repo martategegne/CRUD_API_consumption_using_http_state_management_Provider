@@ -1,30 +1,49 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 
 import 'package:crud_flutter_app/main.dart';
+import 'package:crud_flutter_app/providers/photo_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('App loads and displays title', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => PhotoProvider(),
+        child: MyApp(),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verify AppBar title
+    expect(find.text('Photo Manager'), findsOneWidget);
+  });
+
+  testWidgets('Floating Action Button is present', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => PhotoProvider(),
+        child: MyApp(),
+      ),
+    );
+
+    // Verify FAB exists
+    expect(find.byIcon(Icons.add), findsOneWidget);
+  });
+
+  testWidgets('Shows loading indicator initially', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
+        create: (_) => PhotoProvider(),
+        child: MyApp(),
+      ),
+    );
+
+    // Trigger frame
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Check loading indicator (may appear briefly)
+    expect(find.byType(CircularProgressIndicator), findsWidgets);
   });
+
 }
