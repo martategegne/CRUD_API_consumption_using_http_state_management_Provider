@@ -37,7 +37,17 @@ class _HomeScreenState extends State<HomeScreen> {
               final photo = provider.photos[index];
 
               return ListTile(
-                leading: Image.network(photo.url, width: 50),
+                leading: SizedBox(
+  width: 50,
+  height: 50,
+  child: Image.network(
+    "https://picsum.photos/id/${photo.id}/100/100",
+    fit: BoxFit.cover,
+    errorBuilder: (context, error, stackTrace) {
+      return const Icon(Icons.broken_image);
+    },
+  ),
+),
                 title: Text(photo.title),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
