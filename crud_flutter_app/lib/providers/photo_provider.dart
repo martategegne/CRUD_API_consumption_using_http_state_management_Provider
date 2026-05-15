@@ -25,17 +25,38 @@ class PhotoProvider extends ChangeNotifier {
   }
 
   Future<void> addPhoto(Photo photo) async {
+  try {
     final newPhoto = await _api.createPhoto(photo);
-    photos.add(newPhoto);
+
+    final fixedPhoto = Photo(
+      id: DateTime.now().millisecondsSinceEpoch,
+      title: newPhoto.title,
+      url: newPhoto.url,
+    );
+
+    photos.insert(0, fixedPhoto);
+    notifyListeners();
+  } catch (e) {
+    error = e.toString();
     notifyListeners();
   }
+}
 
   Future<void> editPhoto(Photo photo) async {
+  try {
     final updated = await _api.updatePhoto(photo);
+
     int index = photos.indexWhere((p) => p.id == photo.id);
-    photos[index] = updated;
+
+    if (index != -1) {
+      photos[index] = updated;
+      notifyListeners();
+    }
+  } catch (e) {
+    error = e.toString();
     notifyListeners();
   }
+}
 
   Future<void> removePhoto(int id) async {
     await _api.deletePhoto(id);

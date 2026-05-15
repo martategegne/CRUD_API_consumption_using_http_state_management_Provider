@@ -115,17 +115,18 @@ TextEditingController urlController =
               ),
               ElevatedButton(
                 onPressed: () {
-                  provider.editPhoto(
-  Photo(
-    id: photo.id,
-    title: titleController.text,
-    url: urlController.text.isEmpty
-        ? photo.url
-        : urlController.text,
-  ),
-);
-                  Navigator.pop(context);
-                },
+  provider.editPhoto(
+    Photo(
+      id: photo.id,
+      title: titleController.text.trim(),
+      url: urlController.text.trim().isEmpty
+          ? photo.url
+          : urlController.text.trim(),
+    ),
+  );
+
+  Navigator.pop(context);
+},
                 child: const Text("Update"),
               ),
             ],
