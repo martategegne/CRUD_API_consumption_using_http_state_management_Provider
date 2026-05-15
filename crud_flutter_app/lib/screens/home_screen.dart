@@ -148,19 +148,32 @@ TextEditingController urlController =
       ),
       floatingActionButton: FloatingActionButton(
   onPressed: () {
-    TextEditingController titleController = TextEditingController();
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController urlController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text("Add New Photo"),
-          content: TextField(
-            controller: titleController,
-            decoration: const InputDecoration(
-              hintText: "Enter photo title",
-            ),
-          ),
+          content: Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    TextField(
+      controller: titleController,
+      decoration: const InputDecoration(
+        hintText: "Enter photo title",
+      ),
+    ),
+    const SizedBox(height: 10),
+    TextField(
+      controller: urlController,
+      decoration: const InputDecoration(
+        hintText: "Enter image URL (optional)",
+      ),
+    ),
+  ],
+),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
