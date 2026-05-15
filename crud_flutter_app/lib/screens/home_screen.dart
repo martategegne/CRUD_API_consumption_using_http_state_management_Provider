@@ -125,14 +125,48 @@ subtitle: Text(
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Provider.of<PhotoProvider>(context, listen: false).addPhoto(
-            Photo(id: 0, title: "New Photo",
-             url: "https://picsum.photos/id/${DateTime.now().millisecondsSinceEpoch % 1000}/200/200" ),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
+  onPressed: () {
+    TextEditingController titleController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Add New Photo"),
+          content: TextField(
+            controller: titleController,
+            decoration: const InputDecoration(
+              hintText: "Enter photo title",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Provider.of<PhotoProvider>(context, listen: false).addPhoto(
+                  Photo(
+                    id: DateTime.now().millisecondsSinceEpoch,
+                    title: titleController.text.isEmpty
+                        ? "Untitled Photo"
+                        : titleController.text,
+                    url:
+                        "https://picsum.photos/id/${DateTime.now().millisecondsSinceEpoch % 1000}/200/200",
+                  ),
+                );
+                Navigator.pop(context);
+              },
+              child: const Text("Add"),
+            ),
+          ],
+        );
+      },
+    );
+  },
+  child: const Icon(Icons.add),
+),
     );
   }
 }
