@@ -182,21 +182,19 @@ TextEditingController urlController =
             ElevatedButton(
               
               onPressed: () {
-                TextEditingController titleController = TextEditingController();
-TextEditingController urlController = TextEditingController();
-                Provider.of<PhotoProvider>(context, listen: false).addPhoto(
-                  Photo(
-  id: DateTime.now().millisecondsSinceEpoch,
-  title: titleController.text.isEmpty
-      ? "Untitled Photo"
-      : titleController.text,
-  url: urlController.text.isEmpty
-      ? "https://picsum.photos/200"
-      : urlController.text,
-),
-                );
-                Navigator.pop(context);
-              },
+  final title = titleController.text.trim();
+  final url = urlController.text.trim();
+
+  Provider.of<PhotoProvider>(context, listen: false).addPhoto(
+    Photo(
+      id: DateTime.now().millisecondsSinceEpoch,
+      title: title.isEmpty ? "Untitled Photo" : title,
+      url: url.isEmpty ? "https://picsum.photos/200" : url,
+    ),
+  );
+
+  Navigator.pop(context);
+},
               child: const Text("Add"),
             ),
           ],
