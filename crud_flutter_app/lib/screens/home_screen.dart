@@ -80,19 +80,34 @@ subtitle: Text(
     IconButton(
       icon: const Icon(Icons.edit, color: Colors.blue),
       onPressed: () {
-        TextEditingController controller =
-            TextEditingController(text: photo.title);
+        TextEditingController titleController =
+    TextEditingController(text: photo.title);
+
+TextEditingController urlController =
+    TextEditingController(text: photo.url);
 
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
             title: const Text("Edit Photo"),
-            content: TextField(
-              controller: controller,
-              decoration: const InputDecoration(
-                hintText: "Enter new title",
-              ),
-            ),
+            content: Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    TextField(
+      controller: titleController,
+      decoration: const InputDecoration(
+        hintText: "Enter photo title",
+      ),
+    ),
+    const SizedBox(height: 10),
+    TextField(
+      controller: urlController,
+      decoration: const InputDecoration(
+        hintText: "Enter image URL",
+      ),
+    ),
+  ],
+),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
@@ -101,12 +116,14 @@ subtitle: Text(
               ElevatedButton(
                 onPressed: () {
                   provider.editPhoto(
-                    Photo(
-                      id: photo.id,
-                      title: controller.text,
-                      url: photo.url,
-                    ),
-                  );
+  Photo(
+    id: photo.id,
+    title: titleController.text,
+    url: urlController.text.isEmpty
+        ? photo.url
+        : urlController.text,
+  ),
+);
                   Navigator.pop(context);
                 },
                 child: const Text("Update"),
@@ -150,16 +167,20 @@ subtitle: Text(
               child: const Text("Cancel"),
             ),
             ElevatedButton(
+              
               onPressed: () {
+                TextEditingController titleController = TextEditingController();
+TextEditingController urlController = TextEditingController();
                 Provider.of<PhotoProvider>(context, listen: false).addPhoto(
                   Photo(
-                    id: DateTime.now().millisecondsSinceEpoch,
-                    title: titleController.text.isEmpty
-                        ? "Untitled Photo"
-                        : titleController.text,
-                    url:
-                        "https://picsum.photos/id/${DateTime.now().millisecondsSinceEpoch % 1000}/200/200",
-                  ),
+  id: DateTime.now().millisecondsSinceEpoch,
+  title: titleController.text.isEmpty
+      ? "Untitled Photo"
+      : titleController.text,
+  url: urlController.text.isEmpty
+      ? "https://picsum.photos/200"
+      : urlController.text,
+),
                 );
                 Navigator.pop(context);
               },
