@@ -41,12 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
   width: 50,
   height: 50,
   child: Image.network(
-    "https://picsum.photos/id/${photo.id}/100/100",
-    fit: BoxFit.cover,
-    errorBuilder: (context, error, stackTrace) {
-      return const Icon(Icons.broken_image);
-    },
-  ),
+  photo.url,
+  fit: BoxFit.cover,
+  errorBuilder: (context, error, stackTrace) {
+    return const Icon(Icons.broken_image);
+  },
+),
 ),
                 title: Text(photo.title),
                 trailing: Row(
