@@ -49,10 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
     width: 60,
     height: 60,
     child: Image.network(
-  photo.url,
+  photo.url.isNotEmpty
+      ? photo.url
+      : "https://picsum.photos/200",
   fit: BoxFit.cover,
   errorBuilder: (context, error, stackTrace) {
-    return const Icon(Icons.broken_image);
+    return Image.network(
+      "https://picsum.photos/200",
+      fit: BoxFit.cover,
+    );
   },
 ),
 ),
