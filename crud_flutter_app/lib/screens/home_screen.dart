@@ -36,11 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
             itemBuilder: (context, index) {
               final photo = provider.photos[index];
 
-              return ListTile(
-                leading: SizedBox(
-  width: 50,
-  height: 50,
-  child: Image.network(
+              return Card(
+  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child: ListTile(
+                leading: ClipRRect(
+  borderRadius: BorderRadius.circular(8),
+  child: SizedBox(
+    width: 60,
+    height: 60,
+    child: Image.network(
   photo.url,
   fit: BoxFit.cover,
   errorBuilder: (context, error, stackTrace) {
@@ -48,7 +56,18 @@ class _HomeScreenState extends State<HomeScreen> {
   },
 ),
 ),
-                title: Text(photo.title),
+),
+                title: Text(
+  photo.title,
+  style: const TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 15,
+  ),
+),
+subtitle: Text(
+  "Photo ID: ${photo.id}",
+  style: const TextStyle(color: Colors.grey),
+),
                 trailing: Row(
   mainAxisSize: MainAxisSize.min,
   children: [
@@ -99,7 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ],
 ),
-              );
+              ),
+);
             },
           );
         },
