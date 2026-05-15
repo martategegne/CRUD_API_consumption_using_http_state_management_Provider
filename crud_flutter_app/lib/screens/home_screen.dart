@@ -50,15 +50,55 @@ class _HomeScreenState extends State<HomeScreen> {
 ),
                 title: Text(photo.title),
                 trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () =>
-                          provider.removePhoto(photo.id),
+  mainAxisSize: MainAxisSize.min,
+  children: [
+
+    IconButton(
+      icon: const Icon(Icons.edit, color: Colors.blue),
+      onPressed: () {
+        TextEditingController controller =
+            TextEditingController(text: photo.title);
+
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text("Edit Photo"),
+            content: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                hintText: "Enter new title",
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  provider.editPhoto(
+                    Photo(
+                      id: photo.id,
+                      title: controller.text,
+                      url: photo.url,
                     ),
-                  ],
-                ),
+                  );
+                  Navigator.pop(context);
+                },
+                child: const Text("Update"),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+
+    IconButton(
+      icon: const Icon(Icons.delete, color: Colors.red),
+      onPressed: () => provider.removePhoto(photo.id),
+    ),
+  ],
+),
               );
             },
           );
