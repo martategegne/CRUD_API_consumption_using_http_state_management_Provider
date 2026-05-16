@@ -1,54 +1,70 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/photo.dart';
+import '../models/user.dart';
 
 class ApiService {
-  final String baseUrl = "https://jsonplaceholder.typicode.com/photos";
+  final String baseUrl = "https://dummyjson.com";
+  final String endpoint = "/users";
 
-  Future<List<Photo>> fetchPhotos() async {
-    final response = await http.get(Uri.parse(baseUrl));
+  
+  final Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "x-api-key": "reqres-free-v1",
+  };
+
+  Future<List<User>> fetchUsers() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: headers, 
+    );
 
     if (response.statusCode == 200) {
-      List data = jsonDecode(response.body);
-      return data.take(20).map((e) => Photo.fromJson(e)).toList();
+      final data = jsonDecode(response.body)['users'];
+
+      return (data as List)
+          .map((e) => User.fromJson(e)) 
+          .toList();
     } else {
-      throw Exception("Failed to load photos");
+      throw Exception("Failed to load users"); 
     }
   }
 
-  Future<Photo> createPhoto(Photo photo) async {
+  Future<User> createUser(User user) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
-      body: jsonEncode(photo.toJson()),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse('$baseUrl$endpoint/add'),
+      headers: headers, 
+      body: jsonEncode(user.toJson()), 
     );
 
     if (response.statusCode == 201) {
-      return Photo.fromJson(jsonDecode(response.body));
+      return user; 
     } else {
-      throw Exception("Failed to create photo");
+      throw Exception("Failed to create user"); 
     }
   }
 
-  Future<Photo> updatePhoto(Photo photo) async {
+  Future<User> updateUser(User user) async {
     final response = await http.put(
-      Uri.parse("$baseUrl/${photo.id}"),
-      body: jsonEncode(photo.toJson()),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse("$baseUrl$endpoint/${user.id}"),
+      headers: headers, 
+      body: jsonEncode(user.toJson()), 
     );
 
     if (response.statusCode == 200) {
-      return Photo.fromJson(jsonDecode(response.body));
+      return user; 
     } else {
-      throw Exception("Failed to update photo");
+      throw Exception("Failed to update user"); 
     }
   }
 
-  Future<void> deletePhoto(int id) async {
-    final response = await http.delete(Uri.parse("$baseUrl/$id"));
+  Future<void> deleteUser(int id) async {
+    final response = await http.delete(
+      Uri.parse("$baseUrl$endpoint/$id"),
+      headers: headers, 
+    );
 
     if (response.statusCode != 200) {
-      throw Exception("Failed to delete photo");
+      throw Exception("Failed to delete user"); 
     }
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/photo_provider.dart';
+import 'providers/user_provider.dart';
 import 'screens/home_screen.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => PhotoProvider(),
+      create: (_) => UserProvider(),
       child: MyApp(),
     ),
   );
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
   debugShowCheckedModeBanner: false,
-  title: 'Photo Manager',
+  title: 'User Manager',
 
   theme: ThemeData(
     primarySwatch: Colors.blue,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/photo_provider.dart';
-import '../models/photo.dart';
+import '../providers/user_provider.dart';
+import '../models/user.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,14 +14,14 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     Future.microtask(() =>
-        Provider.of<PhotoProvider>(context, listen: false).loadPhotos());
+        Provider.of<UserProvider>(context, listen: false).loadUsers());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Photo Manager")),
-      body: Consumer<PhotoProvider>(
+      appBar: AppBar(title: Text("User Manager")),
+      body: Consumer<UserProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
             return Center(child: CircularProgressIndicator());
@@ -32,179 +32,156 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return ListView.builder(
-            itemCount: provider.photos.length,
+            itemCount: provider.users.length, 
             itemBuilder: (context, index) {
-              final photo = provider.photos[index];
+              final user = provider.users[index];
 
               return Card(
-  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-  elevation: 3,
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10),
-  ),
-  child: ListTile(
-                leading: ClipRRect(
-  borderRadius: BorderRadius.circular(8),
-  child: SizedBox(
-    width: 60,
-    height: 60,
-    child: Image.network(
-  photo.url.isNotEmpty
-      ? photo.url
-      : "https://picsum.photos/200",
-  fit: BoxFit.cover,
-  errorBuilder: (context, error, stackTrace) {
-    return Image.network(
-      "https://picsum.photos/200",
-      fit: BoxFit.cover,
-    );
-  },
-),
-),
-),
-                title: Text(
-  photo.title,
-  style: const TextStyle(
-    fontWeight: FontWeight.w600,
-    fontSize: 15,
-  ),
-),
-subtitle: Text(
-  "Photo ID: ${photo.id}",
-  style: const TextStyle(color: Colors.grey),
-),
-                trailing: Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      user.avatar.isNotEmpty
+                          ? user.avatar
+                          : "https://picsum.photos/200",
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Text("${user.firstName} ${user.lastName}"),
+                  subtitle: Text("Email: ${user.email}"),
 
-    IconButton(
-      icon: const Icon(Icons.edit, color: Colors.blue),
-      onPressed: () {
-        TextEditingController titleController =
-    TextEditingController(text: photo.title);
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
 
-TextEditingController urlController =
-    TextEditingController(text: photo.url);
+                      
+                      IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () {
+                          final firstNameController =
+                              TextEditingController(text: user.firstName);
+                          final lastNameController =
+                              TextEditingController(text: user.lastName);
+                          final emailController =
+                              TextEditingController(text: user.email);
 
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text("Edit Photo"),
-            content: Column(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    TextField(
-      controller: titleController,
-      decoration: const InputDecoration(
-        hintText: "Enter photo title",
-      ),
-    ),
-    const SizedBox(height: 10),
-    TextField(
-      controller: urlController,
-      decoration: const InputDecoration(
-        hintText: "Enter image URL",
-      ),
-    ),
-  ],
-),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-  provider.editPhoto(
-    Photo(
-      id: photo.id,
-      title: titleController.text.trim(),
-      url: urlController.text.trim().isEmpty
-          ? photo.url
-          : urlController.text.trim(),
-    ),
-  );
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: Text("Edit User"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextField(
+                                    controller: firstNameController,
+                                    decoration: InputDecoration(hintText: "First Name"),
+                                  ),
+                                  TextField(
+                                    controller: lastNameController,
+                                    decoration: InputDecoration(hintText: "Last Name"),
+                                  ),
+                                  TextField(
+                                    controller: emailController,
+                                    decoration: InputDecoration(hintText: "Email"),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("Cancel"),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    provider.editUser(User(
+                                      id: user.id,
+                                      firstName: firstNameController.text.trim(),
+                                      lastName: lastNameController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      avatar: user.avatar,
+                                    ));
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Update"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
 
-  Navigator.pop(context);
-},
-                child: const Text("Update"),
-              ),
-            ],
-          ),
-        );
-      },
-    ),
-
-    IconButton(
-      icon: const Icon(Icons.delete, color: Colors.red),
-      onPressed: () => provider.removePhoto(photo.id),
-    ),
-  ],
-),
-              ),
-);
+                      // 🗑 DELETE
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => provider.removeUser(user.id),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
           );
         },
       ),
+
+      
       floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    final TextEditingController titleController = TextEditingController();
-    final TextEditingController urlController = TextEditingController();
+        onPressed: () {
+          final firstNameController = TextEditingController();
+          final lastNameController = TextEditingController();
+          final emailController = TextEditingController();
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Add New Photo"),
-          content: Column(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    TextField(
-      controller: titleController,
-      decoration: const InputDecoration(
-        hintText: "Enter photo title",
-      ),
-    ),
-    const SizedBox(height: 10),
-    TextField(
-      controller: urlController,
-      decoration: const InputDecoration(
-        hintText: "Enter image URL (optional)",
-      ),
-    ),
-  ],
-),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Cancel"),
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text("Add User"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: firstNameController,
+                    decoration: InputDecoration(hintText: "First Name"),
+                  ),
+                  TextField(
+                    controller: lastNameController,
+                    decoration: InputDecoration(hintText: "Last Name"),
+                  ),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(hintText: "Email"),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Provider.of<UserProvider>(context, listen: false).addUser(
+                      User(
+                        id: DateTime.now().millisecondsSinceEpoch,
+                        firstName: firstNameController.text.trim(),
+                        lastName: lastNameController.text.trim(),
+                        email: emailController.text.trim(),
+                        avatar: "https://picsum.photos/200",
+                      ),
+                    );
+
+                    Navigator.pop(context);
+                  },
+                  child: Text("Add"),
+                ),
+              ],
             ),
-            ElevatedButton(
-              
-              onPressed: () {
-  final title = titleController.text.trim();
-  final url = urlController.text.trim();
-
-  Provider.of<PhotoProvider>(context, listen: false).addPhoto(
-    Photo(
-      id: DateTime.now().millisecondsSinceEpoch,
-      title: title.isEmpty ? "Untitled Photo" : title,
-      url: url.isEmpty ? "https://picsum.photos/200" : url,
-    ),
-  );
-
-  Navigator.pop(context);
-},
-              child: const Text("Add"),
-            ),
-          ],
-        );
-      },
-    );
-  },
-  child: const Icon(Icons.add),
-),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
