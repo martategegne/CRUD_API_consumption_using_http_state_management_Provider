@@ -62,7 +62,13 @@ It allows users to:
 - Edit User Dialog
   <img width="981" height="708" alt="image" src="https://github.com/user-attachments/assets/b7aa4601-d2a8-4e51-aa4f-d6458db174d2" />
 
+
 - Loading State
+  <img width="576" height="1280" alt="photo_2026-05-16_10-27-15" src="https://github.com/user-attachments/assets/992e077f-1a91-4233-998e-30116b56feba" />
+
+  <img width="576" height="1280" alt="photo_2026-05-16_10-27-36" src="https://github.com/user-attachments/assets/4db8065b-c5e7-4683-ab94-2f85050bba7f" />
+
+
 
 -Add new user
 <img width="998" height="711" alt="image" src="https://github.com/user-attachments/assets/629286d7-95d8-4ca0-9d23-3ab192f2d8b0" />
