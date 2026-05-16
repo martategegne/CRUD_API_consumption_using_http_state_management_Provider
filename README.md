@@ -4,7 +4,7 @@
 
 | Name | ID | Section |
 |------|----|---------|
-| YOUR NAME HERE | YOUR ID HERE | YOUR SECTION HERE |
+| Marta Tegegne | UGR/4457/16| Section-1 |
 
 ---
 
