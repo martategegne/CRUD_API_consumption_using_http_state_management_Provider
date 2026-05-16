@@ -6,7 +6,6 @@
 |------|----|---------|
 | Marta Tegegne | UGR/4457/16| Section-1 |
 
----
 
 ## Description
 
@@ -99,6 +98,7 @@ lib/
 ├── models/
 
 │ └── user.dart
+
 │
 ├── services/
 
@@ -142,7 +142,7 @@ lib/
 
 1. Clone the repository:
 bash
-git clone https://github.com/your-username/user-manager-app.git
+git clone https://github.com/martategegne/CRUD_API_consumption_using_http_state_management_Provider.git
 
 2. Navigate into the project:
 cd user-manager-app
